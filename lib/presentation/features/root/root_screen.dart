@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:j_calc/presentation/common/extensions/build_context_ext.dart';
 import 'package:j_calc/presentation/features/calculator/calculator_screen.dart';
 import 'package:j_calc/presentation/features/history/history_screen.dart';
 
@@ -18,9 +19,9 @@ class RootScreen extends StatelessWidget {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
         onTap: (index) => _onItemTapped(context, index),
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.calculate), label: 'Calculator'),
-          BottomNavigationBarItem(icon: Icon(Icons.history), label: 'History'),
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.calculate), label: context.l10n.calculator),
+          BottomNavigationBarItem(icon: Icon(Icons.history), label: context.l10n.history),
         ],
       ),
     );

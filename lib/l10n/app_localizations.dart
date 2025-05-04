@@ -101,11 +101,11 @@ abstract class AppLocalizations {
   /// **'Hello World :))'**
   String get helloWorld;
 
-  /// No description provided for @calculatro.
+  /// No description provided for @calculator.
   ///
   /// In en, this message translates to:
   /// **'Calculator'**
-  String get calculatro;
+  String get calculator;
 
   /// No description provided for @history.
   ///

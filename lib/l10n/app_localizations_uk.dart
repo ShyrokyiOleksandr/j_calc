@@ -12,7 +12,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get helloWorld => 'Привіт, світ))';
 
   @override
-  String get calculatro => 'Calculator';
+  String get calculator => 'Калькулятор';
 
   @override
   String get history => 'Історія';
