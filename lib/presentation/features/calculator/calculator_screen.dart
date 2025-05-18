@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:j_calc/core/app_images.dart';
-import 'package:j_calc/presentation/common/extensions/build_context_ext.dart';
-import 'package:j_calc/presentation/features/calculator/bloc/calculator_bloc.dart';
-import 'package:j_calc/presentation/features/calculator/bloc/calculator_events.dart';
-import 'package:j_calc/presentation/features/calculator/calculator_state.dart';
 import 'package:j_calc/presentation/features/calculator/cubit/calculator_cubit.dart';
+import 'package:j_calc/presentation/features/calculator/cubit/calculator_state.dart';
 
 class CalculatorScreen extends StatelessWidget {
   const CalculatorScreen({super.key});
@@ -14,74 +10,141 @@ class CalculatorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              context.l10n.helloWorld,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
-            ),
-            Image.asset(AppImages.tiolochka),
-            const SizedBox(height: 20),
-            Text('Cubit'),
-            BlocBuilder<CalculatorCubit, CalculatorState>(
-              builder: (context, state) {
-                if (state.isLoading) {
-                  return const CircularProgressIndicator.adaptive();
-                }
-
-                return Text(
-                  state.value.toString(),
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
-                );
-              },
-            ),
-
-            Row(
+    return BlocBuilder<CalculatorCubit, CalculatorState>(
+      builder: (context, state) {
+        return Scaffold(
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                  onPressed: () => context.read<CalculatorCubit>().increment(),
-                  child: Text('+'),
-                ),
-                ElevatedButton(
-                  onPressed: () => context.read<CalculatorCubit>().decrement(),
-                  child: Text('-'),
+                Text(state.input),
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        FilledButton(
+                          onPressed: () {
+                            context.read<CalculatorCubit>().clear();
+                          },
+                          child: Text('AC'),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        FilledButton(
+                          onPressed: () {
+                            context.read<CalculatorCubit>().composeDigit('7');
+                          },
+                          child: Text('7'),
+                        ),
+                        FilledButton(
+                          onPressed: () {
+                            context.read<CalculatorCubit>().composeDigit('8');
+                          },
+                          child: Text('8'),
+                        ),
+                        FilledButton(
+                          onPressed: () {
+                            context.read<CalculatorCubit>().composeDigit('9');
+                          },
+                          child: Text('9'),
+                        ),
+                        FilledButton(
+                          onPressed: () {
+                            context.read<CalculatorCubit>().composeDigit('×');
+                          },
+                          child: Text('×'),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        FilledButton(
+                          onPressed: () {
+                            context.read<CalculatorCubit>().composeDigit('4');
+                          },
+                          child: Text('4'),
+                        ),
+                        FilledButton(
+                          onPressed: () {
+                            context.read<CalculatorCubit>().composeDigit('5');
+                          },
+                          child: Text('5'),
+                        ),
+                        FilledButton(
+                          onPressed: () {
+                            context.read<CalculatorCubit>().composeDigit('6');
+                          },
+                          child: Text('6'),
+                        ),
+                        FilledButton(onPressed: () {}, child: Text('-')),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        FilledButton(
+                          onPressed: () {
+                            context.read<CalculatorCubit>().composeDigit('1');
+                          },
+                          child: Text('1'),
+                        ),
+                        FilledButton(
+                          onPressed: () {
+                            context.read<CalculatorCubit>().composeDigit('2');
+                          },
+                          child: Text('2'),
+                        ),
+                        FilledButton(
+                          onPressed: () {
+                            context.read<CalculatorCubit>().composeDigit('3');
+                          },
+                          child: Text('3'),
+                        ),
+                        FilledButton(
+                          onPressed: () {
+                            context.read<CalculatorCubit>().composeDigit('+');
+                          },
+                          child: Text('+'),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        FilledButton(
+                          onPressed: () {
+                            context.read<CalculatorCubit>().composeDigit('1');
+                          },
+                          child: Text('1'),
+                        ),
+                        FilledButton(
+                          onPressed: () {
+                            context.read<CalculatorCubit>().composeDigit('2');
+                          },
+                          child: Text('2'),
+                        ),
+                        FilledButton(
+                          onPressed: () {
+                            context.read<CalculatorCubit>().composeDigit('3');
+                          },
+                          child: Text('3'),
+                        ),
+                        FilledButton(
+                          onPressed: () {
+                            context.read<CalculatorCubit>().composeDigit('+');
+                          },
+                          child: Text('+'),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ],
             ),
-            const SizedBox(height: 20),
-            Text('Bloc'),
-            BlocBuilder<CalculatorBloc, int>(
-              builder: (context, state) {
-                return Text(
-                  state.toString(),
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
-                );
-              },
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () => context.read<CalculatorBloc>().add(IncrementCounter()),
-                  child: Text('+'),
-                ),
-                ElevatedButton(
-                  onPressed: () => context.read<CalculatorBloc>().add(DecrementCounter()),
-                  child: Text('-'),
-                ),
-                ElevatedButton(
-                  onPressed: () => context.read<CalculatorBloc>().add(ResetCounter()),
-                  child: Text('Zero'),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
