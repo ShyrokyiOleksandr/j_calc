@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:j_calc/presentation/features/calculator/cubit/calculator_state.dart';
+import 'package:j_calc/presentation/features/calculator/widgets/calculator_history_item.dart';
 
 enum CalculatorOperation { add, subtract, multiply, divide }
 
@@ -13,6 +14,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     }
 
     final operators = ['×', '÷', '+', '-', '.', '='];
+
     final lastChar = state.input.isNotEmpty ? state.input[state.input.length - 1] : '';
     if (operators.contains(newSymbol) && operators.contains(lastChar)) {
       emit(state.copyWith(error: Exception('Cannot enter an operator after an operator')));
@@ -30,31 +32,42 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   }
 
   void clear() {
-    emit(CalculatorState.initial());
+    emit(state.copyWith(input: '0', result: 0, error: null));
   }
 
   void backspace() {
     if (state.input.length > 1) {
       emit(state.copyWith(input: state.input.substring(0, state.input.length - 1)));
     } else {
-      emit(CalculatorState.initial());
+      clear();
     }
   }
 
   void calculate() {
     String input = state.input;
-
+    String historyItem = "";
+    historyItem += input;
     input = input.replaceAll('×', '*').replaceAll('÷', '/');
 
     double? result;
     try {
       result = _evaluateExpression(input);
+      historyItem += result.toStringAsFixed(2);
     } catch (e) {
       emit(state.copyWith(error: Exception(e.toString()), result: 0));
       emit(state.copyWith(error: null));
       return;
     }
-    emit(state.copyWith(input: "${state.input}\n${result.toStringAsFixed(2)}", result: result));
+
+    final updatedHistory = List<HistoryItem>.from(state.historyItems);
+    updatedHistory.add(HistoryItem(expression: historyItem, timestamp: DateTime.now()));
+    emit(
+      state.copyWith(
+        input: "${state.input}\n${result.toStringAsFixed(2)}",
+        result: result,
+        historyItems: updatedHistory,
+      ),
+    );
   }
 
   // Simple expression evaluator (supports +, -, *, /, decimals)
@@ -72,7 +85,6 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   List<String> _tokenize(String expr) {
     final regex = RegExp(r'(\d+\.\d+|\d+|[+\-*/()])');
     final result = regex.allMatches(expr).map((m) => m.group(0)!).toList();
-    print(result);
     return result;
   }
 
@@ -132,5 +144,11 @@ class CalculatorCubit extends Cubit<CalculatorState> {
       }
     }
     return stack.single;
+  }
+
+  void deleteHistoryItem(int index) {
+    final updatedHistory = List<HistoryItem>.from(state.historyItems);
+    updatedHistory.removeAt(index);
+    emit(state.copyWith(historyItems: updatedHistory));
   }
 }
