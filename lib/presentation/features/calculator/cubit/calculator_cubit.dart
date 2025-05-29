@@ -148,7 +148,11 @@ class CalculatorCubit extends Cubit<CalculatorState> {
 
   void deleteHistoryItem(int index) {
     final updatedHistory = List<HistoryItem>.from(state.historyItems);
-    updatedHistory.removeAt(index);
-    emit(state.copyWith(historyItems: updatedHistory));
+    final removedItem = updatedHistory.removeAt(index);
+    emit(state.copyWith(historyItems: updatedHistory, deletedItem: removedItem));
+  }
+
+  void clearDeletedItem() {
+    emit(state.copyWith(deletedItem: null));
   }
 }
