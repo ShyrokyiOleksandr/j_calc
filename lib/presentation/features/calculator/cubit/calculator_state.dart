@@ -1,3 +1,5 @@
+import 'package:j_calc/domain/history_item.dart';
+
 class CalculatorState {
   final String input;
   final double result;
@@ -9,15 +11,24 @@ class CalculatorState {
     return CalculatorState(input: '0', result: 0, error: null);
   }
 
-  CalculatorState copyWith({String? input, double? result, Exception? error}) {
+  CalculatorState copyWith({
+    String? input,
+    double? result,
+    List<HistoryItem>? historyItems,
+    Exception? error,
+    HistoryItem? deletedItem,
+  }) {
     return CalculatorState(input: input ?? this.input, result: result ?? this.result, error: error);
   }
 
   @override
-  bool operator ==(covariant CalculatorState other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other.input == input && other.result == result && other.error == error;
+    return other is CalculatorState &&
+        other.input == input &&
+        other.result == result &&
+        other.error == error;
   }
 
   @override

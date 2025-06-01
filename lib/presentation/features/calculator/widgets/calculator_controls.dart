@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:j_calc/domain/history_item.dart';
 import 'package:j_calc/presentation/features/calculator/cubit/calculator_cubit.dart';
 import 'package:j_calc/presentation/features/calculator/widgets/calculator_button.dart';
 import 'package:j_calc/presentation/features/calculator/widgets/calculator_button_row.dart';
+import 'package:j_calc/presentation/features/history/cubit/history_cubit.dart';
 
 class CalculatorControls extends StatelessWidget {
   const CalculatorControls({super.key});
@@ -45,6 +47,12 @@ class CalculatorControls extends StatelessWidget {
                 onPressed: () {
                   context.read<CalculatorCubit>().composeDigit('=');
                   context.read<CalculatorCubit>().calculate();
+                  final calculatorState = context.read<CalculatorCubit>().state;
+                  final historyItem = HistoryItem(
+                    expression: calculatorState.input.replaceFirst('\n', ""),
+                    timestamp: DateTime.now(),
+                  );
+                  context.read<HistoryCubit>().addItem(historyItem);
                 },
               ),
               CalculatorButton(symbol: '-'),

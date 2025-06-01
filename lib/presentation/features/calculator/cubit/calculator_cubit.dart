@@ -13,6 +13,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     }
 
     final operators = ['×', '÷', '+', '-', '.', '='];
+
     final lastChar = state.input.isNotEmpty ? state.input[state.input.length - 1] : '';
     if (operators.contains(newSymbol) && operators.contains(lastChar)) {
       emit(state.copyWith(error: Exception('Cannot enter an operator after an operator')));
@@ -30,20 +31,19 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   }
 
   void clear() {
-    emit(CalculatorState.initial());
+    emit(state.copyWith(input: '0', result: 0, error: null));
   }
 
   void backspace() {
     if (state.input.length > 1) {
       emit(state.copyWith(input: state.input.substring(0, state.input.length - 1)));
     } else {
-      emit(CalculatorState.initial());
+      clear();
     }
   }
 
   void calculate() {
     String input = state.input;
-
     input = input.replaceAll('×', '*').replaceAll('÷', '/');
 
     double? result;
@@ -72,7 +72,6 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   List<String> _tokenize(String expr) {
     final regex = RegExp(r'(\d+\.\d+|\d+|[+\-*/()])');
     final result = regex.allMatches(expr).map((m) => m.group(0)!).toList();
-    print(result);
     return result;
   }
 
