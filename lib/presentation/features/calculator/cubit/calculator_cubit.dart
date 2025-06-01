@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:j_calc/presentation/features/calculator/cubit/calculator_state.dart';
-import 'package:j_calc/presentation/features/calculator/widgets/calculator_history_item.dart';
 
 enum CalculatorOperation { add, subtract, multiply, divide }
 
@@ -45,29 +44,17 @@ class CalculatorCubit extends Cubit<CalculatorState> {
 
   void calculate() {
     String input = state.input;
-    String historyItem = "";
-    historyItem += input;
     input = input.replaceAll('×', '*').replaceAll('÷', '/');
 
     double? result;
     try {
       result = _evaluateExpression(input);
-      historyItem += result.toStringAsFixed(2);
     } catch (e) {
       emit(state.copyWith(error: Exception(e.toString()), result: 0));
       emit(state.copyWith(error: null));
       return;
     }
-
-    final updatedHistory = List<HistoryItem>.from(state.historyItems);
-    updatedHistory.add(HistoryItem(expression: historyItem, timestamp: DateTime.now()));
-    emit(
-      state.copyWith(
-        input: "${state.input}\n${result.toStringAsFixed(2)}",
-        result: result,
-        historyItems: updatedHistory,
-      ),
-    );
+    emit(state.copyWith(input: "${state.input}\n${result.toStringAsFixed(2)}", result: result));
   }
 
   // Simple expression evaluator (supports +, -, *, /, decimals)
@@ -144,15 +131,5 @@ class CalculatorCubit extends Cubit<CalculatorState> {
       }
     }
     return stack.single;
-  }
-
-  void deleteHistoryItem(int index) {
-    final updatedHistory = List<HistoryItem>.from(state.historyItems);
-    final removedItem = updatedHistory.removeAt(index);
-    emit(state.copyWith(historyItems: updatedHistory, deletedItem: removedItem));
-  }
-
-  void clearDeletedItem() {
-    emit(state.copyWith(deletedItem: null));
   }
 }
