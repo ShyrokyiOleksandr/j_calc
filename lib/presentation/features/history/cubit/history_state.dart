@@ -1,4 +1,4 @@
-import 'package:j_calc/domain/history_item.dart';
+import 'package:j_calc/domain/entities/history_item.dart';
 
 class HistoryState {
   final List<HistoryItem> historyItems;

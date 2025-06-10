@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:j_calc/domain/history_item.dart';
+import 'package:j_calc/domain/entities/history_item.dart';
 import 'package:j_calc/presentation/features/calculator/cubit/calculator_cubit.dart';
 import 'package:j_calc/presentation/features/calculator/widgets/calculator_button.dart';
 import 'package:j_calc/presentation/features/calculator/widgets/calculator_button_row.dart';
