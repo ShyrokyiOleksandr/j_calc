@@ -39,7 +39,22 @@ class HistoryScreen extends StatelessWidget {
       // },
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(),
+          appBar: AppBar(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('History'),
+                const SizedBox(width: 16),
+                if (state.historyItems.isNotEmpty)
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () {
+                      context.read<HistoryCubit>().clearAll();
+                    },
+                  ),
+              ],
+            ),
+          ),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
             child: ListView.builder(
