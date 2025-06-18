@@ -19,7 +19,7 @@ class LocalDataSource {
     await _sharedPreferences.setStringList('historyItems', historyListStr);
   }
 
-  Future<void> clearAll() async {
+  Future<void> clearHistory() async {
     await _sharedPreferences.clear();
   }
 }

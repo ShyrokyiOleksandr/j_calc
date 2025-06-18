@@ -17,4 +17,9 @@ class HistoryRepositoryImpl implements HistoryRepository {
   Future<void> saveHistory(List<HistoryItem> history) {
     return _localDataSource.saveHistory(history);
   }
+
+  @override
+  Future<void> clearHistory() async {
+    return await _localDataSource.clearHistory();
+  }
 }

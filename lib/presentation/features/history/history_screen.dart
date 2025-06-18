@@ -49,7 +49,7 @@ class HistoryScreen extends StatelessWidget {
                   IconButton(
                     icon: const Icon(Icons.delete),
                     onPressed: () {
-                      context.read<HistoryCubit>().clearAll();
+                      context.read<HistoryCubit>().clear();
                     },
                   ),
               ],

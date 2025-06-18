@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:j_calc/data/data_sources/local_data_source.dart';
 import 'package:j_calc/data/repositories/history_repository_impl.dart';
+import 'package:j_calc/domain/use_cases/clear_history_use_case.dart';
 import 'package:j_calc/domain/use_cases/get_history_use_case.dart';
 import 'package:j_calc/domain/use_cases/save_history_use_case.dart';
 import 'package:j_calc/presentation/common/l10n/app_localizations.dart';
@@ -37,6 +38,11 @@ class MyApp extends StatelessWidget {
                       ),
                     ),
                     getHistoryUseCase: GetHistoryUseCase(
+                      historyRepository: HistoryRepositoryImpl(
+                        localDataSource: LocalDataSource(sharedPreferences: snapshot.data!),
+                      ),
+                    ),
+                    clearHistoryUseCase: ClearHistoryUseCase(
                       historyRepository: HistoryRepositoryImpl(
                         localDataSource: LocalDataSource(sharedPreferences: snapshot.data!),
                       ),
