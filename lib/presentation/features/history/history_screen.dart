@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:j_calc/presentation/features/calculator/cubit/calculator_cubit.dart';
 import 'package:intl/intl.dart';
+import 'package:j_calc/app_service_locator.dart';
 import 'package:j_calc/presentation/features/history/cubit/history_cubit.dart';
 import 'package:j_calc/presentation/features/history/cubit/history_state.dart';
 // import 'package:j_calc/presentation/features/calculator/cubit/calculator_state.dart';
 
 class HistoryScreen extends StatelessWidget {
-  const HistoryScreen({super.key});
+  HistoryScreen({super.key});
 
   static const route = '/history';
+
+  final HistoryCubit _historyCubit = getIt<HistoryCubit>();
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +40,7 @@ class HistoryScreen extends StatelessWidget {
       //     context.read<HistoryCubit>().clearDeletedItem();
       //   }
       // },
+      bloc: _historyCubit,
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
@@ -55,27 +59,30 @@ class HistoryScreen extends StatelessWidget {
               ],
             ),
           ),
-          body: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              itemCount: state.historyItems.length,
-              itemBuilder: (context, index) {
-                final item = state.historyItems[index];
-                return ListTile(
-                  title: Text(item.expression),
-                  subtitle: Text(DateFormat('HH:mm:ss dd.MM.yyyy').format(item.timestamp)),
-                  trailing: ElevatedButton(
-                    onPressed: () {
-                      final deleteIndex = state.historyItems.length - 1 - index;
-                      context.read<HistoryCubit>().deleteHistoryItem(deleteIndex);
-                    },
-                    child: const Text("delete"),
+          body:
+              state.historyItems.isEmpty
+                  ? Column(children: [const Center(child: Text('No history yet'))])
+                  : Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: state.historyItems.length,
+                      itemBuilder: (context, index) {
+                        final item = state.historyItems[index];
+                        return ListTile(
+                          title: Text(item.expression),
+                          subtitle: Text(DateFormat('HH:mm:ss dd.MM.yyyy').format(item.timestamp)),
+                          trailing: ElevatedButton(
+                            onPressed: () {
+                              final deleteIndex = state.historyItems.length - 1 - index;
+                              context.read<HistoryCubit>().deleteHistoryItem(deleteIndex);
+                            },
+                            child: const Text("delete"),
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                );
-              },
-            ),
-          ),
         );
       },
     );
